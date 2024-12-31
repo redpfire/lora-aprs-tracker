@@ -1,6 +1,6 @@
 #include <lora/fifo.h>
-#include <zephyr/types.h>
 #include <zephyr/kernel.h>
+#include <zephyr/types.h>
 
 K_FIFO_DEFINE(lora_packet_fifo);
 K_SEM_DEFINE(lora_packet_sem, 1, 1);

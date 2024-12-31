@@ -16,7 +16,5 @@ struct APRS_Beacon_State {
 };
 
 // Beacon logic was separated so it could be easily tested
-char *aprs_beacon_tick(struct GNSS_Data *gnss_data, 
-                      struct APRS_Beacon_State *state,
-                      struct APRS_Smart_Beacon_Config *aprs_sb_config,
-                      struct APRS_Header *aprs_header);
+char *aprs_beacon_tick(struct GNSS_Data *gnss_data, struct APRS_Beacon_State *state,
+                       struct APRS_Smart_Beacon_Config *aprs_sb_config, struct APRS_Header *aprs_header);

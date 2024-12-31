@@ -1,14 +1,13 @@
-#include <aprs/packet.h>
 #include <aprs/aprs.h>
 #include <aprs/format.h>
+#include <aprs/packet.h>
 #include <zephyr/kernel.h>
 
+#include <math.h>
 #include <stdio.h>
 #include <string.h>
-#include <math.h>
 
-//char *aprs_generate_pos_packet(const char *callsign, const char *tocall, const char *symbolTable, const char *symbol, const char* comment) {
-char *aprs_generate_pos_packet(struct APRS_Header *header, struct GNSS_Data *gnss_data, const char* comment) {
+char *aprs_generate_pos_packet(struct APRS_Header *header, struct GNSS_Data *gnss_data, const char *comment) {
     // TOFIX: assert this is not null
     // this packet will be sent over fifo to other threads
     // to assure that we don't have to copy it i used k_malloc here
@@ -30,15 +29,15 @@ char *aprs_generate_pos_packet(struct APRS_Header *header, struct GNSS_Data *gns
     aprs_format_latitude(gnss_data->latitude, latString);
     aprs_format_longitude(gnss_data->longitude, lonString);
 
-	if (speed > 0) {
-		aprs_format_speed(speed, speedString);
-		aprs_format_bearing(gnss_data->bearing, bearingString);
+    if (speed > 0) {
+        aprs_format_speed(speed, speedString);
+        aprs_format_bearing(gnss_data->bearing, bearingString);
 
-		sprintf(raw_packet, "%s%c%s%c%s/%s%s", latString, header->symbol_table, lonString, header->symbol, bearingString, speedString, comment);
-	}
-	else {
-		sprintf(raw_packet, "%s%c%s%c%s", latString, header->symbol_table, lonString, header->symbol, comment);
-	}
+        sprintf(raw_packet, "%s%c%s%c%s/%s%s", latString, header->symbol_table, lonString, header->symbol,
+                bearingString, speedString, comment);
+    } else {
+        sprintf(raw_packet, "%s%c%s%c%s", latString, header->symbol_table, lonString, header->symbol, comment);
+    }
 
     aprs_write_raw_packet(header, raw_packet, packet);
     // TODO: assert that there is no buffer overflow

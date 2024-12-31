@@ -1,6 +1,6 @@
 #pragma once
-#include <stdlib.h>
 #include <stdint.h>
+#include <stdlib.h>
 
 #define LORA_NODE DT_ALIAS(lora0)
 

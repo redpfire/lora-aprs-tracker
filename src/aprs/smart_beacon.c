@@ -1,7 +1,7 @@
-#include <aprs/smart_beacon.h>
 #include <aprs/packet.h>
-#include <zephyr/kernel.h>
+#include <aprs/smart_beacon.h>
 #include <string.h>
+#include <zephyr/kernel.h>
 
 static struct APRS_Smart_Beacon_Config sb_config;
 K_SEM_DEFINE(aprs_sb_sem, 1, 1);
@@ -26,20 +26,21 @@ void aprs_sb_apply_defaults(struct APRS_Smart_Beacon_Config *config) {
     // TODO: A real config
     // Those are for a walking human
     config->fast_speed = 15; // km/h
-    config->slow_speed = 3; // km/h
+    config->slow_speed = 3;  // km/h
 
     config->fast_rate_ms = 60 * 1000;
     config->slow_rate_ms = 120 * 1000;
-    
+
     // corner peg detection params
     config->min_turn_time_ms = 15 * 1000;
     config->min_turn_angle = 3; // deg
-    config->turn_slope = 40; // quote: This number, when divided by your current speed 
-                              // will be added to the Min Turn Angle in order to increase the turn threshold
-                              // at lower speeds.
+    config->turn_slope = 40;    // quote: This number, when divided by your current
+                                // speed will be added to the Min Turn Angle in order
+                                // to increase the turn threshold at lower speeds.
 }
 
-size_t aprs_sb_check_corner_peg(struct APRS_Smart_Beacon_Config *config, struct GNSS_Data *gnss_data, int heading_delta_since_beacon, int ms_since_beacon) {
+size_t aprs_sb_check_corner_peg(struct APRS_Smart_Beacon_Config *config, struct GNSS_Data *gnss_data,
+                                int heading_delta_since_beacon, int ms_since_beacon) {
     if (gnss_data->speed == 0) {
         return 0;
     }
@@ -57,7 +58,7 @@ int aprs_sb_get_rate_ms(struct APRS_Smart_Beacon_Config *config, struct GNSS_Dat
     if (gnss_data->speed < config->slow_speed) { // stopped condition
         return config->slow_rate_ms;
     }
-    
+
     if (gnss_data->speed > config->fast_speed) { // wzium
         return config->fast_rate_ms;
     }
